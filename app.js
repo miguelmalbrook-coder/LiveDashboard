@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Splash Screen
     const splash = document.getElementById('splash-screen');
-    setTimeout(() => {
-        splash.style.opacity = '0';
-        splash.style.visibility = 'hidden';
-    }, 2500); // Wait 2.5 seconds to show off the premium animation
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            splash.style.opacity = '0';
+            splash.style.visibility = 'hidden';
+        }, 500); // Small delay to ensure smooth transition after everything loads
+    });
 
     // 2. Localization
     const langSwitcher = document.getElementById('langSwitcher');
@@ -24,6 +26,25 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTranslations(e.target.value);
     });
 
+    // 2.5 Theme Toggle
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const currentTheme = localStorage.getItem('theme');
+    
+    // Default to light mode if no preference is set
+    if (currentTheme === 'light' || !currentTheme) {
+        document.body.classList.add('light-mode');
+        if (!currentTheme) localStorage.setItem('theme', 'light');
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('light-mode');
+        if (document.body.classList.contains('light-mode')) {
+            localStorage.setItem('theme', 'light');
+        } else {
+            localStorage.setItem('theme', 'dark');
+        }
+    });
+
     // 3. Scroll Reveal Animations
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
@@ -36,23 +57,79 @@ document.addEventListener('DOMContentLoaded', () => {
     
     reveals.forEach(reveal => observer.observe(reveal));
 
+    // 3.5 Logo Visibility Logic
+    const navLogo = document.getElementById('nav-logo');
+    const heroLogoContainer = document.getElementById('hero-logo-container');
+    
+    if (navLogo && heroLogoContainer) {
+        const logoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Hero logo is visible, hide nav logo
+                    navLogo.classList.remove('visible');
+                } else {
+                    // Hero logo is NOT visible, show nav logo
+                    navLogo.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        logoObserver.observe(heroLogoContainer);
+    }
+
     // 4. Portfolio Data and Logic
     const portfolioData = [
-        { id: 1, type: 'artwork', img: 'https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?q=80&w=500&auto=format&fit=crop', title: 'Abstract Harmony' },
-        { id: 2, type: 'photography', sub: 'landscape', img: 'https://images.unsplash.com/photo-1506744626753-eda8151a7471?q=80&w=500&auto=format&fit=crop', title: 'Mountain Vista' },
-        { id: 3, type: 'photography', sub: 'portraits', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=500&auto=format&fit=crop', title: 'Urban Portrait' },
-        { id: 4, type: 'poster', img: 'https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=500&auto=format&fit=crop', title: 'Event Poster' },
-        { id: 5, type: 'logo', img: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=500&auto=format&fit=crop', title: 'Brand Identity' },
-        { id: 6, type: 'digital', img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=500&auto=format&fit=crop', title: 'Cyber City' },
-        { id: 7, type: 'illustration', img: 'https://images.unsplash.com/photo-1578301978018-3005759f48f7?q=80&w=500&auto=format&fit=crop', title: 'Character Design' },
-        { id: 8, type: 'web', img: 'https://images.unsplash.com/photo-1507238692062-110ce05f9401?q=80&w=500&auto=format&fit=crop', title: 'E-commerce UI' },
-        { id: 9, type: 'photography', sub: 'architect', img: 'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?q=80&w=500&auto=format&fit=crop', title: 'Modern Lines' },
-        { id: 10, type: 'photography', sub: 'product', img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=500&auto=format&fit=crop', title: 'Watch Commercial' },
+        { id: 1, type: 'photography', sub: 'landscape', img: 'images/Abstract-Photography.jpeg', title: 'Abstract Photography', desc: 'A stunning abstract perspective captured through the lens, showcasing vibrant colors and dynamic lighting.' },
+        { id: 2, type: 'digital', img: 'images/Digital Art.jpeg', title: 'Digital Art 1', desc: 'An imaginative digital piece exploring modern themes and futuristic aesthetics with bold turquoise accents.' },
+        { id: 3, type: 'digital', img: 'images/Digital-Art (2).jpeg', title: 'Digital Art 2', desc: 'A vivid digital creation focusing on intricate details and a breathtaking holographic color palette.' },
+        { id: 4, type: 'digital', img: 'images/Digital-Art (3).jpeg', title: 'Digital Art 3', desc: 'Surreal digital artwork that blends reality with fantasy, designed entirely using modern software tools.' },
+        { id: 5, type: 'digital', img: 'images/Digital-Art (4).jpeg', title: 'Digital Art 4', desc: 'A conceptual piece that reflects the intersection of technology and natural forms.' },
+        { id: 6, type: 'digital', img: 'images/Digital-Art (5).jpeg', title: 'Digital Art 5', desc: 'A vibrant character study rendered in stunning 3D using Blender and Adobe Photoshop.' },
+        { id: 7, type: 'illustration', img: 'images/Illustration.jpeg', title: 'Illustration 1', desc: 'A hand-drawn vector illustration utilizing smooth curves and a pastel color scheme.' },
+        { id: 8, type: 'illustration', img: 'images/Illustration (2).jpeg', title: 'Illustration 2', desc: 'A narrative-driven illustration designed to tell a story through visual depth and composition.' },
+        { id: 9, type: 'illustration', img: 'images/Illustration (3).jpeg', title: 'Illustration 3', desc: 'Stylized character illustration highlighting unique fashion and modern graphic design principles.' },
+        { id: 10, type: 'illustration', img: 'images/Illustration (4).jpeg', title: 'Illustration 4', desc: 'An abstract vector illustration created with Adobe Illustrator, featuring geometric harmony.' },
+        { id: 11, type: 'photography', sub: 'portraits', img: 'images/Photgraphy2.jpeg', title: 'Photography 2', desc: 'A striking portrait capturing genuine emotion, framed perfectly against a soft backdrop.' },
+        { id: 12, type: 'photography', sub: 'architect', img: 'images/Photography.jpeg', title: 'Photography 1', desc: 'Architectural photography focusing on leading lines and the structural elegance of modern buildings.' },
+        { id: 13, type: 'photography', sub: 'product', img: 'images/Photography (2).jpeg', title: 'Photography 2', desc: 'Commercial product photography with crisp lighting to highlight the premium quality of the subject.' },
+        { id: 14, type: 'photography', sub: 'landscape', img: 'images/Photography (3).jpeg', title: 'Photography 3', desc: 'A beautiful landscape photograph demonstrating the vastness and serenity of nature.' },
+        { id: 15, type: 'photography', sub: 'portraits', img: 'images/Photography (4).jpeg', title: 'Photography 4', desc: 'An intimate portrait emphasizing the interplay between natural light and shadow.' },
+        { id: 16, type: 'photography', sub: 'architect', img: 'images/Photography (5).jpeg', title: 'Photography 5', desc: 'Capturing the raw geometric beauty of urban architecture and glass facades.' },
+        { id: 17, type: 'photography', sub: 'product', img: 'images/Photography (6).jpeg', title: 'Photography 6', desc: 'A clean, minimalist product shot designed for a high-end e-commerce campaign.' },
+        { id: 18, type: 'photography', sub: 'landscape', img: 'images/Photography (7).jpeg', title: 'Photography 7', desc: 'A breathtaking sunset landscape showcasing vibrant orange and teal skies over the horizon.' },
+        { id: 19, type: 'photography', sub: 'portraits', img: 'images/Photography (8).jpeg', title: 'Photography 8', desc: 'A creative portrait using unique angles and shallow depth of field.' }
     ];
 
     const portfolioGrid = document.getElementById('portfolio-grid');
     const photoSubFilters = document.getElementById('photo-sub-filters');
     
+    // Modal Elements
+    const modal = document.getElementById('gallery-modal');
+    const modalImg = document.getElementById('modal-img');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+    const closeModal = document.querySelector('.close-modal');
+
+    function openModal(item) {
+        modalImg.src = item.img;
+        modalTitle.innerText = item.title;
+        modalDesc.innerText = item.desc;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    closeModal.addEventListener('click', () => {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+
     function renderPortfolio(filterType, subFilterType = null) {
         portfolioGrid.innerHTML = '';
         portfolioData.forEach(item => {
@@ -68,6 +145,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3 style="color: white; margin:0;">${item.title}</h3>
                     </div>
                 `;
+                
+                // Add click event to open modal
+                div.addEventListener('click', () => openModal(item));
+                
                 portfolioGrid.appendChild(div);
             }
         });

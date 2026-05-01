@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOLOARTITUDE | Salomé Abel</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 </head>
 <body>
 
     <!-- Splash Screen -->
     <div id="splash-screen">
-        <div class="splash-logo">SOLOARTITUDE</div>
+        <img src="images/Logo_Design.jpg" alt="SOLOARTITUDE Logo" class="splash-logo-img">
         <div class="loader-bar">
             <div class="loader-progress"></div>
         </div>
@@ -25,7 +28,10 @@
 
     <!-- Header Navigation -->
     <nav>
-        <a href="#home" class="nav-brand">SOLOARTITUDE</a>
+        <a href="#home" class="nav-brand">
+            <img src="images/Logo_Design.jpg" alt="Logo" class="nav-logo-img" id="nav-logo">
+            SOLOARTITUDE
+        </a>
         <ul class="nav-links">
             <li><a href="#about" data-i18n="nav_about">About</a></li>
             <li><a href="#portfolio" data-i18n="nav_portfolio">Portfolio</a></li>
@@ -33,17 +39,20 @@
             <li><a href="#services" data-i18n="nav_services">Services</a></li>
             <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
         </ul>
-        <select class="lang-selector" id="langSwitcher">
-            <option value="en">EN</option>
-            <option value="fr">FR</option>
-            <option value="crs">CRS</option>
-        </select>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">🌓</button>
+            <select class="lang-selector" id="langSwitcher">
+                <option value="en">EN</option>
+                <option value="fr">FR</option>
+                <option value="crs">CRS</option>
+            </select>
+        </div>
     </nav>
 
     <!-- Hero Section -->
     <section id="home">
-        <div class="hero-img-container">
-            <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=300&auto=format&fit=crop" alt="Salomé Abel" class="hero-img">
+        <div class="hero-img-container" id="hero-logo-container">
+            <img src="images/Logo_Design.jpg" alt="SOLOARTITUDE Logo" class="hero-img">
         </div>
         <h1 class="hero-title reveal" data-i18n="hero_title">SOLOARTITUDE</h1>
         <h2 class="hero-subtitle reveal" data-i18n="hero_subtitle">Salomé Abel</h2>
@@ -68,7 +77,7 @@
                 </div>
             </div>
             <div class="about-image">
-                <img src="https://images.unsplash.com/photo-1626544827763-d516dce335e2?q=80&w=600&auto=format&fit=crop" alt="Design Tools" style="width: 100%; border-radius: 12px; filter: hue-rotate(180deg) brightness(0.8);">
+                <img src="images/About-Image.jpeg" alt="Design Tools" style="width: 100%; border-radius: 12px; object-fit: cover; aspect-ratio: 1/1;">
             </div>
         </div>
     </section>
@@ -153,6 +162,20 @@
             </div>
         </div>
     </section>
+
+    <!-- Gallery Modal Lightbox -->
+    <div id="gallery-modal" class="gallery-modal">
+        <span class="close-modal">&times;</span>
+        <div class="modal-content">
+            <div class="modal-img-container">
+                <img id="modal-img" src="" alt="">
+            </div>
+            <div class="modal-info">
+                <h2 id="modal-title"></h2>
+                <p id="modal-desc"></p>
+            </div>
+        </div>
+    </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="translations.js"></script>
